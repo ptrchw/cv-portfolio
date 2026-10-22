@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NumLah Teh Tarik — Design System v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Zilla+Slab:wght@700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  :root {
+    --ink: #231F16; --ink-soft: #5A4F38;
+    --surface: #FFFFFF; --paper: #F4EEE1; --paper-2: #FBF5E9;
+    --bg: #E4DBC8; --line: #231F16;
+    --gold-1: #F5C050; --gold-2: #E8A93C; --gold-3: #D4921A;
+    --charcoal-1: #6E6E6E; --charcoal-2: #3A3A3A;
+    --red: #B0392B;
+    --shadow-card: 0 3px 8px rgba(35,31,22,0.30);
+    --shadow-btn: 0 3px 6px rgba(35,31,22,0.34);
+    --shadow-inset: inset 0 2px 5px rgba(35,31,22,0.34);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    padding: 40px 32px 80px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+
+  /* Masthead */
+  .masthead { margin-bottom: 48px; padding-bottom: 24px; border-bottom: 2.5px solid var(--ink); }
+  .concept-tag {
+    display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    background: var(--ink); color: #fff; border-radius: 4px;
+    padding: 3px 8px; margin-bottom: 14px;
+  }
+  .masthead h1 { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: 38px; margin-bottom: 6px; }
+  .masthead .sub { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-soft); }
+
+  /* Section structure */
+  section { margin-bottom: 44px; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px dotted var(--line);
+  }
+  .section-head .num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft);
+    border: 1.5px solid var(--line); border-radius: 4px; padding: 2px 7px;
+  }
+  .section-head h2 { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: 20px; }
+
+  /* Shared card */
+  .card {
+    background: var(--surface); border: 2px solid var(--line);
+    border-radius: 16px; padding: 20px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* Labels and specs */
+  .label {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 8px; display: block;
+  }
+  .spec { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink); line-height: 1.8; }
+  .spec .k { color: var(--ink-soft); }
+  .note { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); line-height: 1.6; margin-top: 10px; }
+
+  /* 01 Typography */
+  .type-row { display: flex; align-items: baseline; justify-content: space-between; padding: 16px 0; border-bottom: 2px dotted var(--line); gap: 16px; }
+  .type-row:last-child { border-bottom: none; }
+  .type-sample-display { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: 26px; }
+  .type-sample-mono { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 15px; }
+  .type-sample-body { font-family: 'Atkinson Hyperlegible', sans-serif; font-size: 14px; }
+  .type-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); text-align: right; line-height: 1.7; flex-shrink: 0; }
+
+  /* Type scale table */
+  .scale-row { display: flex; align-items: baseline; gap: 14px; padding: 8px 0; border-bottom: 2px dotted var(--line); }
+  .scale-row:last-child { border-bottom: none; }
+  .scale-size { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 11px; color: var(--ink); width: 36px; flex-shrink: 0; }
+  .scale-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); flex: 1; }
+  .scale-example { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); }
+
+  /* 02 Colour */
+  .swatch-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .swatch { flex: 1; min-width: 90px; }
+  .swatch .chip { height: 56px; border-radius: 10px; border: 2px solid var(--line); margin-bottom: 6px; }
+  .swatch .name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; color: var(--ink); }
+  .swatch .hex { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--ink-soft); }
+  .colour-rule { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); line-height: 1.7; margin-top: 10px; }
+  .colour-rule b { color: var(--ink); }
+
+  /* 03 Container */
+  .phone-mini {
+    width: 150px; height: 300px; background: linear-gradient(180deg, var(--paper) 0%, #DFD3B8 100%);
+    border: 8px solid #1C1B18; border-radius: 26px; flex-shrink: 0; position: relative; overflow: hidden;
+  }
+  .phone-mini .statusbar { height: 18px; }
+  .phone-mini .pad { padding: 10px; }
+  .phone-mini .fake-h1 { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+  .phone-mini .fake-card { background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; height: 50px; margin-bottom: 8px; }
+  .phone-mini .fake-cta { background: linear-gradient(180deg, #F5C050 0%, #D4921A 100%); border: 1.5px solid var(--line); height: 26px; border-radius: 999px; }
+
+  /* 04 Ledger card demo */
+  .ledger-demo { background: var(--surface); border: 2px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 8px; }
+  .ledger-demo-head { display:flex; justify-content:space-between; padding-bottom:10px; margin-bottom:10px; border-bottom:2px dotted var(--line); font-weight:700; }
+  .entry-row-demo { display:flex; align-items:center; justify-content:space-between; background: var(--paper-2); border: 2px solid var(--line); border-radius: 14px; padding: 10px 14px; box-shadow: var(--shadow-inset); font-family:'IBM Plex Mono',monospace; font-weight:700; letter-spacing:0.1em; }
+
+  /* 05 Rocker / toggle */
+  .rocker-demo { display: flex; background: #E4D9C2; border-radius: 999px; padding: 5px; border: 2px solid var(--line); box-shadow: var(--shadow-inset); max-width: 260px; }
+  .rocker-demo button { flex: 1; border: none; background: transparent; color: var(--ink-soft); font-family: inherit; font-weight: 700; font-size: 15px; padding: 10px 0; border-radius: 999px; }
+  .rocker-demo button.active { background: linear-gradient(180deg, #F5C050 0%, #D4921A 100%); color: var(--ink); border: 2px solid var(--line); box-shadow: 0 3px 6px rgba(35,31,22,0.28), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -2px 0 rgba(35,31,22,0.18); }
+
+  /* 06 Buttons */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  .btn {
+    font-family: 'Atkinson Hyperlegible', sans-serif; font-weight: 700; font-size: 14px;
+    padding: 12px 20px; border-radius: 999px; cursor: default; border: 2.5px solid var(--line);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, #F5C050 0%, #D4921A 100%);
+    color: var(--ink);
+    box-shadow: 0 4px 8px rgba(35,31,22,0.32), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -2px 0 rgba(35,31,22,0.18);
+  }
+  .btn-secondary { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-btn); }
+  .btn-caption { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); margin-top: 4px; line-height: 1.6; }
+
+  /* 07 Toto grid */
+  .toto-grid-demo { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; max-width: 320px; }
+  .toto-grid-demo button { aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); font-family: 'Atkinson Hyperlegible', sans-serif; font-weight: 700; font-size: 13px; color: var(--ink); box-shadow: var(--shadow-btn); }
+  .toto-grid-demo button.selected { background: linear-gradient(180deg, var(--charcoal-1) 0%, var(--charcoal-2) 100%); color: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.18); }
+
+  /* 08 Icon scale */
+  .icon-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 2px dotted var(--line); }
+  .icon-row:last-child { border-bottom: none; }
+  .icon-glyph { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--ink); }
+  .icon-glyph .material-icons, .icon-glyph .material-icons-outlined { font-size: 26px; }
+  .icon-size { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 11px; width: 32px; color: var(--ink); flex-shrink: 0; }
+  .icon-use { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft); }
+  .icon-cell { width: 130px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; }
+  .icon-cell .icon-glyph { width: 32px; height: 32px; }
+  .icon-cell .icon-glyph .material-icons, .icon-cell .icon-glyph .material-icons-outlined { font-size: 20px; }
+  .icon-cell .name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink); }
+
+  /* Disclaimer footer */
+  .not-a-prediction { font-family: 'Atkinson Hyperlegible', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-soft); line-height: 1.5; text-align: center; }
+  .footer-note {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-soft);
+    text-align: center; margin-top: 48px; padding-top: 16px; border-top: 2px dotted var(--line);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="concept-tag">Design Concept 2 — Teh Tarik</div>
+    <h1>NumLah Style Guide</h1>
+    <p class="sub">Reference tokens as implemented in numlah-design2-v2_5.html · Jul 2026</p>
+  </div>
+
+  <!-- 00 Persona -->
+  <section>
+    <div class="section-head"><span class="num">00</span><h2>Persona</h2></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="display:flex;min-height:340px">
+        <div style="width:180px;flex-shrink:0;background:var(--paper);border-right:2px solid var(--line);position:relative;overflow:hidden">
+          <svg width="100%" height="100%" viewBox="0 0 180 340" preserveAspectRatio="xMidYMid slice">
+            <rect x="0" y="0" width="180" height="340" fill="#EDE3CC"/>
+            <!-- Uncle Cheng: seated, short-sleeve shirt, kopitiam-uncle silhouette -->
+            <path d="M40 250 Q90 222 140 250 L146 340 L34 340Z" fill="#8A6E3E"/>
+            <path d="M40 250 L74 278 L90 250Z" fill="#6B5330"/>
+            <path d="M140 250 L106 275 L90 250Z" fill="#6B5330"/>
+            <path d="M60 130 Q56 195 68 238 L100 248 Q122 248 130 220 Q138 188 133 138 Q120 96 90 92 Q64 98 60 130Z" fill="#D9A876"/>
+            <path d="M62 96 Q60 70 90 66 Q120 70 118 96 Q118 118 90 122 Q62 118 62 96Z" fill="#C9C9C9"/>
+            <path d="M62 96 Q58 82 68 72 Q78 64 90 64 Q104 64 114 72 Q122 80 118 96 Q112 84 90 82 Q68 84 62 96Z" fill="#9C9C9C"/>
+            <circle cx="80" cy="160" r="15" fill="none" stroke="#3E2E20" stroke-width="4"/>
+            <circle cx="112" cy="158" r="14" fill="none" stroke="#3E2E20" stroke-width="4"/>
+            <line x1="95" y1="159" x2="98" y2="158" stroke="#3E2E20" stroke-width="4"/>
+            <line x1="65" y1="162" x2="56" y2="165" stroke="#3E2E20" stroke-width="4"/>
+            <line x1="126" y1="156" x2="135" y2="150" stroke="#3E2E20" stroke-width="4"/>
+            <circle cx="80" cy="160" r="3" fill="#2E2318"/>
+            <circle cx="112" cy="158" r="3" fill="#2E2318"/>
+            <path d="M68 145 Q80 139 92 146" stroke="#3E2E20" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M100 143 Q112 137 124 145" stroke="#3E2E20" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M95 168 Q90 186 97 192" stroke="#B9855C" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M72 206 Q95 220 118 204" fill="#B9855C"/>
+            <path d="M74 204 Q95 216 116 202" stroke="#8A5E3E" stroke-width="1.5" fill="none"/>
+            <!-- cup of teh tarik -->
+            <path d="M118 232 L128 232 L126 254 L116 254Z" fill="#FBF5E9" stroke="#3E2E20" stroke-width="2"/>
+            <ellipse cx="122" cy="232" rx="6" ry="2.4" fill="#8A5E2E" stroke="#3E2E20" stroke-width="1.5"/>
+          </svg>
+          <div style="position:absolute;top:14px;left:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;color:var(--ink-soft)">PERSONA 02</div>
+        </div>
+        <div style="flex:1;padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:0 28px">
+          <div style="grid-column:1 / -1;margin-bottom:18px">
+            <h3 style="font-family:'Zilla Slab',serif;font-weight:700;font-size:26px;margin-bottom:2px">Uncle Cheng</h3>
+            <span class="type-meta" style="text-align:left;display:block">THE ROUTINE ENTHUSIAST · Design 2 · Teh Tarik</span>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">About</span>
+            <p class="spec" style="line-height:1.7">Age 55-75, retired or<br>semi-retired<br>Plays 4D/TOTO every draw,<br>like clockwork</p>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">Motivations</span>
+            <p class="spec" style="line-height:1.7">Ritual and routine — same<br>numbers, same stall, same<br>time, every week</p>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">Betting habits</span>
+            <p class="spec" style="line-height:1.7">$2-5 fixed combos, decades-<br>long personal numbers<br>(birthdays, car plates, dates)</p>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">Core needs</span>
+            <p class="spec" style="line-height:1.7">Big legible text, a plain<br>record of what he played,<br>zero fuss to check it</p>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">Voice</span>
+            <p class="spec" style="line-height:1.7">Wants it to feel like his old<br>account book — familiar,<br>unhurried, trustworthy.</p>
+          </div>
+          <div style="margin-bottom:18px">
+            <span class="label">Pain points</span>
+            <p class="spec" style="line-height:1.7">Small tap targets, fiddly<br>gestures, apps that try to<br>be too clever</p>
+          </div>
+          <div style="grid-column:1 / -1;display:flex;gap:14px;margin-top:6px">
+            <div class="entry-row-demo" style="flex:1;justify-content:center"><span class="scale-size" style="width:auto">$2-5</span></div>
+            <div class="entry-row-demo" style="flex:1;justify-content:center"><span class="scale-size" style="width:auto">Every Draw</span></div>
+          </div>
+          <div style="grid-column:1 / -1;display:flex;gap:14px;margin-top:8px">
+            <div class="btn-caption" style="flex:1;text-align:center">TYPICAL STAKE PER BET</div>
+            <div class="btn-caption" style="flex:1;text-align:center">PLAYS WITHOUT FAIL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:10px">Persona 1 — Sarah Lim, the Hopeful Dreamer — lives in the Chit Chat style guide, whose lighter-touch, higher-motion tokens diverge from Teh Tarik's warmer, larger-target passbook direction.</p>
+  </section>
+
+  <!-- 01 Typography -->
+  <section>
+    <div class="section-head"><span class="num">01</span><h2>Typography</h2></div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="type-row">
+        <span class="type-sample-display">Every number confirm got history</span>
+        <span class="type-meta">Zilla Slab · 700<br>Brand name, ledger card titles, entry-card titles, splash name</span>
+      </div>
+      <div class="type-row">
+        <span class="type-sample-mono">Every number confirm got history lah</span>
+        <span class="type-meta">IBM Plex Mono · 600–700<br>Brand tagline (always visible under NumLah wordmark), splash tag, processing copy, per-number stats</span>
+      </div>
+      <div class="type-row">
+        <span class="type-sample-body">Every draw separate one ah — past results cannot tell you what comes next hor.</span>
+        <span class="type-meta">Atkinson Hyperlegible · 400–700<br>All UI body copy, labels, buttons, disclaimers — the workhorse face</span>
+      </div>
+    </div>
+    <div class="card">
+      <span class="label">Type Scale — Reference Sizes In Use</span>
+      <div class="scale-row"><span class="scale-size">28px</span><span class="scale-role">Headline numbers — 4D result numbers, digit boxes</span></div>
+      <div class="scale-row"><span class="scale-size">24px</span><span class="scale-role">Entry chip values, entry-card title, confirm-title</span></div>
+      <div class="scale-row"><span class="scale-size">20px</span><span class="scale-role">Ledger header title, confirm-btn, section headers</span></div>
+      <div class="scale-row"><span class="scale-size">18px</span><span class="scale-role">Result headline value (Last drawn X days ago / Not in our sample of draws leh) — matches draw-panel date size</span></div>
+      <div class="scale-row"><span class="scale-size">17-18px</span><span class="scale-role">Body reading text — btn-secondary, per-num rows, pref labels</span></div>
+      <div class="scale-row"><span class="scale-size">15-16px</span><span class="scale-role">Secondary labels — status text, notif titles, empty-state copy</span></div>
+      <div class="scale-row"><span class="scale-size">14px</span><span class="scale-role">Disclaimers &amp; fine print — .inline-disclaimer, .result-foot, .menu-footer-note (all 400 weight, never bold)</span></div>
+      <div class="scale-row"><span class="scale-size">13px</span><span class="scale-role">Digit-cell-meta ("drawn X times") — regular weight 400, not bold</span></div>
+      <div class="scale-row"><span class="scale-size">10-12px</span><span class="scale-role">Mono meta — brand tagline (10px), notif time, draw-panel sub-labels</span></div>
+      <p class="note">Disclaimer copy is always Atkinson Hyperlegible 400 (regular) — never bold. .digit-cell-meta is also 400 so it reads as calm fine print rather than a data shout.</p>
+    </div>
+  </section>
+
+  <!-- 02 Colour -->
+  <section>
+    <div class="section-head"><span class="num">02</span><h2>Colour Palette</h2></div>
+    <div class="card">
+      <div class="swatch-row" style="margin-bottom:16px">
+        <div class="swatch"><div class="chip" style="background:#231F16"></div><div class="name">Ink</div><div class="hex">#231F16</div></div>
+        <div class="swatch"><div class="chip" style="background:#5A4F38"></div><div class="name">Ink Soft</div><div class="hex">#5A4F38</div></div>
+        <div class="swatch"><div class="chip" style="background:#FFFFFF"></div><div class="name">Surface / White</div><div class="hex">#FFFFFF</div></div>
+        <div class="swatch"><div class="chip" style="background:#F4EEE1"></div><div class="name">Paper</div><div class="hex">#F4EEE1</div></div>
+        <div class="swatch"><div class="chip" style="background:#FBF5E9"></div><div class="name">Paper 2 (chip fill)</div><div class="hex">#FBF5E9</div></div>
+      </div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="chip" style="background:linear-gradient(180deg,#F5C050,#D4921A)"></div><div class="name">Gold — primary CTA / TOTO chip</div><div class="hex">#F5C050 → #D4921A</div></div>
+        <div class="swatch"><div class="chip" style="background:linear-gradient(180deg,#6E6E6E,#3A3A3A)"></div><div class="name">Charcoal — TOTO grid selection</div><div class="hex">#6E6E6E → #3A3A3A</div></div>
+        <div class="swatch"><div class="chip" style="background:#1C1B18"></div><div class="name">Phone bezel</div><div class="hex">#1C1B18</div></div>
+      </div>
+      <div class="colour-rule" style="margin-top:14px">
+        <b>Gold gradient</b> is the single primary-action colour: btn-primary, active rocker tab, confirm-btn.ready, and the toto system-pick highlight. Also used solid (#E8A93C, no gradient) as the unread-notification accent — badge dot and unread-card left border/tint. Never used for destructive actions.<br>
+        <b>Charcoal gradient</b> is reserved for TOTO number-picker selection state only — a deliberately different colour from gold so "picked" and "confirm" never look the same.<br>
+        <b>Ink</b> doubles as the universal 2-2.5px border colour across every card, button, and chip — the consistent "hand-ruled ledger line" that defines the whole surface language.<br>
+        <b>Backgrounds</b> use a top-to-bottom gradient (Paper → ~10% darker) on every full screen: main ledger, splash, all overlays, and the menu drawer.
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Container -->
+  <section>
+    <div class="section-head"><span class="num">03</span><h2>Container Specs</h2></div>
+    <div class="card" style="display:flex;gap:20px;align-items:flex-start">
+      <div class="phone-mini">
+        <div class="statusbar"></div>
+        <div class="pad">
+          <div class="fake-h1">NumLah</div>
+          <div class="fake-card"></div>
+          <div class="fake-card"></div>
+          <div class="fake-cta"></div>
+        </div>
+      </div>
+      <div class="spec">
+        <div><span class="k">Frame:</span> 380px wide · 800px tall · 14px solid #1C1B18 bezel · 48px corner radius</div>
+        <div><span class="k">Screen radius:</span> 36px, matching frame's inner curve</div>
+        <div><span class="k">Background:</span> linear-gradient(180deg, #F4EEE1 0% → #DFD3B8 100%) — every full screen, darker at the bottom</div>
+        <div><span class="k">Content padding:</span> 20px horizontal · 2px top · 12px bottom on .app-body</div>
+        <div><span class="k">Status bar:</span> 16px top / 6px bottom padding, bold 15px</div>
+        <div><span class="k">Screens:</span> ledger (home) → entry (4D digits / TOTO grid) → results, tracked via overlay .open class</div>
+        <div><span class="k">Menu drawer:</span> 80% width, slides from right, rounded left corners only, z-index 6; sub-screens layer on top at z-index 7</div>
+        <div><span class="k">Processing overlay:</span> full-screen translucent paper (92% opacity), z-index 48, spinning ticket-logo + cycling word</div>
+        <div><span class="k">Splash:</span> full-screen, z-index 50, brand mark + name + mono tagline, fades out after ~2s</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Ledger & Entry Rows -->
+  <section>
+    <div class="section-head"><span class="num">04</span><h2>Ledger &amp; Entry Row Specs</h2></div>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="card">
+        <span class="label">.ledger-card</span>
+        <div class="spec">
+          <div><span class="k">fill:</span> #FFFFFF</div>
+          <div><span class="k">border:</span> 2px solid ink</div>
+          <div><span class="k">radius:</span> 20px · bottom padding 20px</div>
+          <div><span class="k">shadow:</span> var(--shadow-card)</div>
+          <div><span class="k">header divider:</span> 2.5px dotted ink</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="label">.entry-row</span>
+        <div class="spec">
+          <div><span class="k">fill:</span> Paper 2 (#FBF5E9)</div>
+          <div><span class="k">border:</span> 2px solid ink</div>
+          <div><span class="k">radius:</span> 16px</div>
+          <div><span class="k">shadow:</span> var(--shadow-inset) — recessed, like a stamped chit</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="ledger-demo">
+        <div class="ledger-demo-head"><span>4D Numbers</span><span style="font-weight:400;color:var(--ink-soft)">2 saved</span></div>
+        <div class="entry-row-demo" style="margin-bottom:10px"><span>4 8 8 1</span></div>
+        <div class="entry-row-demo"><span>0 2 7 9</span></div>
+      </div>
+      <p class="note">Ledger card = the outer passbook page. Entry row = an individual stamped-in line item, recessed with an inset shadow to read as "written in" rather than floating on top.</p>
+    </div>
+    <div class="card">
+      <span class="label">.draw-panel — Collapsible Draw Info</span>
+      <div class="spec">
+        <div><span class="k">fill:</span> Paper 2 (#FBF5E9) · 2px ink border · 14px radius · inset shadow</div>
+        <div><span class="k">header:</span> "Next Draw" label (15px, ink-soft, 400) + date (18px, ink, 700) + chevron — always visible</div>
+        <div><span class="k">collapsed:</span> shows next draw date only; chevron points down</div>
+        <div><span class="k">expanded:</span> reveals Last Draw result below a dotted divider; chevron rotates 180°</div>
+        <div><span class="k">behaviour:</span> persists regardless of how many numbers are saved; never hides</div>
+        <div><span class="k">animation:</span> max-height 0.28s ease + opacity 0.22s ease</div>
+      </div>
+      <p class="note">Always sits at the top of the ledger card, above the entry list. On TOTO switch, draw info updates to reflect the next TOTO draw date.</p>
+    </div>
+  </section>
+
+  <!-- 05 Rocker — Three Instances -->
+  <section>
+    <div class="section-head"><span class="num">05</span><h2>Rocker — Three Instances</h2></div>
+    <div class="card" style="margin-bottom:14px">
+      <span class="label">Game Toggle (4D / TOTO)</span>
+      <div class="rocker-demo" style="margin-bottom:14px">
+        <button class="active">4D</button>
+        <button>TOTO</button>
+      </div>
+      <div class="spec">
+        <div><span class="k">.rocker:</span> pill track, #E4D9C2 fill, 2px ink border, inset shadow</div>
+        <div><span class="k">.rocker button:</span> 700 weight, 19px, min-height 48px</div>
+        <div><span class="k">.rocker button.active:</span> gold gradient + ink border + layered inset/outset shadow</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <span class="label">Theme Picker (Preferences screen)</span>
+      <div class="rocker-demo" style="margin-bottom:14px">
+        <button class="active">Teh Tarik</button>
+        <button>Chit Chat</button>
+      </div>
+      <div class="spec">
+        <div><span class="k">.pref-rocker:</span> same pill track as game rocker — identical visual language</div>
+        <div><span class="k">Use:</span> lets user switch between Teh Tarik and Chit Chat themes; Teh Tarik selected by default</div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="label">Data Range Picker (Preferences screen)</span>
+      <div class="rocker-demo" style="margin-bottom:10px">
+        <button>1 Year</button>
+        <button class="active">5 Years</button>
+        <button>10 Years</button>
+      </div>
+      <div class="spec">
+        <div><span class="k">.pref-rocker:</span> three-pill variant — same token, three equal segments</div>
+        <div><span class="k">.pref-range-desc:</span> 14px, ink-soft, 400 — updates below rocker on tap to describe the selected range</div>
+        <div><span class="k">Label above:</span> "How many years of past results you want to check?" (direct Singlish question)</div>
+        <div><span class="k">Descriptions:</span> "Fast check for recent draws!" / "Check if your numbers come up often." / "Check against 10-year history!"</div>
+      </div>
+      <p class="note" style="margin-top:10px">All three rockers share the same .pref-rocker / .pref-rocker-btn CSS. The game toggle uses the separate .rocker / .rocker button classes but identical visual tokens.</p>
+    </div>
+  </section>
+
+  <!-- 06 Buttons -->
+  <section>
+    <div class="section-head"><span class="num">06</span><h2>Buttons</h2></div>
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn btn-primary">Check My Numbers</button>
+        <button class="btn btn-secondary">+ Add 4D Number</button>
+      </div>
+      <p class="btn-caption" style="margin-bottom:14px">
+        <b>.btn-primary</b> — gold gradient · ink text · 2.5px ink border · layered inset highlight+shadow · min-height 56px. Main CTA label: "Check My Numbers".<br>
+        <b>Supporting hook:</b> a two-line Singlish prompt sits above the primary button in the empty state only — "Check see if your numbers / got strike before!" — disappears once numbers are saved.<br>
+        <b>.btn-secondary</b> — white fill · ink text+border · standard drop-shadow · min-height 52px. Add-number actions.<br>
+        <b>.confirm-btn</b> (disabled state) — flat #D8CDB0 fill, #B9A87F border, until valid input activates <b>.ready</b> which matches .btn-primary.
+      </p>
+      <div class="btn-row">
+        <div class="entry-row-demo" style="padding:10px 16px">Sure you want to remove this number ah?</div>
+      </div>
+      <p class="btn-caption">
+        <b>Active-state feedback</b> — every primary/secondary button darkens and insets its shadow on :active with a 1px translateY, giving tactile "pressed" confirmation without relying on colour alone.
+      </p>
+    </div>
+  </section>
+
+  <!-- 07 TOTO Number Grid -->
+  <section>
+    <div class="section-head"><span class="num">07</span><h2>TOTO Number Grid</h2></div>
+    <div class="card">
+      <div class="toto-grid-demo" style="margin-bottom:14px">
+        <button class="selected">07</button>
+        <button>12</button>
+        <button class="selected">19</button>
+        <button>23</button>
+        <button>31</button>
+        <button class="selected">44</button>
+      </div>
+      <div class="spec">
+        <div><span class="k">Grid:</span> 5 columns, circular buttons, aspect-ratio 1, 2px ink border, drop-shadow at rest</div>
+        <div><span class="k">.selected:</span> charcoal gradient fill, white text, inset shadow — matches the "punched hole" ticket metaphor</div>
+        <div><span class="k">.disabled:</span> 40% opacity, no pointer events, once 6 main numbers are picked</div>
+        <div><span class="k">System entry:</span> a second grid (.toto-grid-system) appears below a dotted divider once "System" mode is picked; selection uses solid gold instead of charcoal to visually separate it from the main 6</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 Icons -->
+  <section>
+    <div class="section-head"><span class="num">08</span><h2>Icons</h2></div>
+
+    <!-- Size scale summary -->
+    <div class="card" style="margin-bottom:14px">
+      <span class="label">Size Scale</span>
+      <div class="icon-row"><div class="icon-glyph"><span class="material-icons-outlined">home</span></div><span class="icon-size">34px</span><span class="icon-use">home — .home-icon override, larger than standard nav icons since it's the primary escape hatch from any overlay</span></div>
+      <div class="icon-row"><div class="icon-glyph"><span class="material-icons-outlined">close</span></div><span class="icon-size">28px</span><span class="icon-use">Standard icon-btn / chip-action size — arrow_back_ios_new, close, menu, favorite/favorite_border, delete, notifications</span></div>
+      <div class="icon-row"><div class="icon-glyph"><span class="material-icons-outlined">backspace</span></div><span class="icon-size">26px</span><span class="icon-use">backspace — inline in the numeric keypad</span></div>
+      <div class="icon-row"><div class="icon-glyph"><span class="material-icons-outlined">expand_more</span></div><span class="icon-size">22px</span><span class="icon-use">detail-chevron — expand_more/expand_less on "See more detail" toggle</span></div>
+      <div class="icon-row"><div class="icon-glyph"><span class="material-icons-outlined">chevron_right</span></div><span class="icon-size">20-21px</span><span class="icon-use">notif-icon circle (search, schedule, waving_hand), menu-item-chevron (chevron_right)</span></div>
+      <p class="note">Material Icons / Material Icons Outlined only — no line-icon library. Outlined is default/idle state; filled variant signals an "activated" state (e.g. favorite once liked).</p>
+    </div>
+
+    <!-- Icon inventory -->
+    <div class="card">
+      <span class="label">Icon Inventory — As Used in numlah-design2-v2_5.html</span>
+      <table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:11px">
+        <tbody>
+          <tr style="border-bottom:2px dotted var(--line)"><td colspan="2" style="padding:8px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:0.14em;text-transform:uppercase">Navigation</td></tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">arrow_back_ios_new</span></div><span class="name">arrow_back_ios_new</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Back — overlay headers (entry card, results, subscreens)</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">home</span></div><span class="name">home</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Return to ledger from any overlay — .home-icon 34px, top-right</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">close</span></div><span class="name">close</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Dismiss — TOTO entry nav, menu drawer close</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">menu</span></div><span class="name">menu</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Open menu drawer — top-right of ledger header</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">chevron_right</span></div><span class="name">chevron_right</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Menu item row affordance — Notifications, Preferences, About</td>
+          </tr>
+
+          <tr style="border-bottom:2px dotted var(--line)"><td colspan="2" style="padding:8px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:0.14em;text-transform:uppercase">Actions</td></tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph" style="gap:4px"><span class="material-icons-outlined">favorite_border</span></div><div class="icon-glyph"><span class="material-icons">favorite</span></div></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">favorite / favorite_border — Like toggle on entry rows &amp; result cards, filled when liked</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">delete</span></div><span class="name">delete</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Delete entry — opens confirm-backdrop dialog</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">backspace</span></div><span class="name">backspace</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">4D keypad — remove last digit</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph" style="gap:4px"><span class="material-icons-outlined">expand_more</span></div><div class="icon-glyph"><span class="material-icons-outlined">expand_less</span></div></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">expand_more / expand_less — "See more detail" toggle on result cards</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">add</span></div><span class="name">add</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Add Number — empty-state CTA on ledger</td>
+          </tr>
+
+          <tr style="border-bottom:2px dotted var(--line)"><td colspan="2" style="padding:8px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:0.14em;text-transform:uppercase">Menu &amp; Notifications</td></tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">tune</span></div><span class="name">tune</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Menu list — Preferences row icon</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">notifications</span></div><span class="name">notifications</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Menu list — Notifications row icon</td>
+          </tr>
+          <tr style="border-bottom:2px dotted var(--line)">
+            <td style="padding:8px 8px 8px 0"><div class="icon-cell"><div class="icon-glyph"><span class="material-icons-outlined">info</span></div><span class="name">info</span></div></td>
+            <td style="padding:8px;color:var(--ink-soft)">Menu list — About NumLah row icon</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 8px 8px 0">
+              <div style="display:flex;gap:6px">
+                <div class="icon-glyph" style="width:32px;height:32px"><span class="material-icons-outlined" style="font-size:18px">search</span></div>
+                <div class="icon-glyph" style="width:32px;height:32px"><span class="material-icons-outlined" style="font-size:18px">schedule</span></div>
+                <div class="icon-glyph" style="width:32px;height:32px"><span class="material-icons-outlined" style="font-size:18px">waving_hand</span></div>
+              </div>
+            </td>
+            <td style="padding:8px;color:var(--ink-soft)">search / schedule / waving_hand — Individual notification-item icons, inside .notif-icon 40px circle</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 09 Copy Voice -->
+  <section>
+    <div class="section-head"><span class="num">09</span><h2>Copy Voice — Singlish &amp; Mandarin</h2></div>
+
+    <div class="card" style="margin-bottom:14px">
+      <span class="label">Singlish Particles — English Register</span>
+      <div class="spec" style="line-height:2">
+        <div>Uncle Cheng's voice is <b>warm, direct, and unhurried</b> — like chatting with a kopitiam uncle. Use particles purposefully, not randomly.</div>
+        <div><span class="k">leh</span> — soft, slightly resigned or quizzical. "No numbers saved yet leh."</div>
+        <div><span class="k">lah</span> — declarative, familiar. "Every number confirm got history lah."</div>
+        <div><span class="k">lor</span> — matter-of-fact, resigned. "Key in and save lor. Simple."</div>
+        <div><span class="k">ah</span> — questioning, nudging. "How many years of past results you want to check?"</div>
+        <div><span class="k">hor</span> — rhetorical, seeking agreement. "...cannot tell you what comes next hor."</div>
+        <div><span class="k">sia</span> — mild surprise or emphasis. "This number never struck before sia."</div>
+        <div><span class="k">shiok</span> — delight/satisfaction. "System 7 — 7 numbers. Shiok!"</div>
+        <div><span class="k">confirm</span> — absolute certainty. "This number confirm struck before."</div>
+        <div><span class="k">wah</span> — exclamation. "Wah, almost done…" / "Wah, long time no see."</div>
+        <div><span class="k">faster</span> — urgency without aggression. "Faster add your numbers."</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <span class="label">Mandarin Particles — 华语口语</span>
+      <div class="spec" style="line-height:2;font-family:'IBM Plex Mono',monospace;font-size:12px">
+        <div>Mandarin copy uses the same warm, informal register — the kind Chinese-educated Singaporeans use in WeChat messages. Particles carry the same emotional weight as their Singlish counterparts.</div>
+        <div><span class="k">咧 (le)</span> — equivalent of "leh" — soft, slightly resigned. "还没存号码咧。"</div>
+        <div><span class="k">啦 (lā)</span> — equivalent of "lah" — declarative, warm. "每个号码都有历史啦。"</div>
+        <div><span class="k">咯 (lo)</span> — equivalent of "lor" — matter-of-fact. "输入然后存咯，简单。"</div>
+        <div><span class="k">哦 (ó)</span> — equivalent of "ah" — questioning. "你要查几年的记录哦？"</div>
+        <div><span class="k">呵 (he)</span> — equivalent of "hor" — seeking agreement. "...告诉不了你下次的呵。"</div>
+        <div><span class="k">哇 (wā)</span> — exclamation, same as "wah". "哇，好久没出现了。"</div>
+        <div><span class="k">爽 (shuǎng)</span> — equivalent of "shiok" — feels great. "系统7 — 7个号码。爽！"</div>
+        <div style="margin-top:4px"><b>NCPG / responsible play:</b> always in standard Mandarin with no particles — never casual.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label">Key Copy Inventory — Singlish · 简体中文 · Pīnyīn</span>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+        <thead>
+          <tr style="background:var(--ink)">
+            <th style="padding:10px 10px 10px 0;color:var(--gold-1,#F5C050);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-align:left;width:13%">KEY</th>
+            <th style="padding:10px;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-align:left;width:29%">SINGLISH (EN)</th>
+            <th style="padding:10px;color:#A9B2F0;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-align:left;width:29%">简体中文</th>
+            <th style="padding:10px;color:#A9B2F0;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-align:left;width:29%">PĪNYĪN</th>
+          </tr>
+        </thead>
+        <tbody style="font-family:'IBM Plex Mono',monospace">
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Brand</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Tagline</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Every number confirm got history lah</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">每个号码都有历史啦</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Měi gè hàomǎ dōu yǒu lìshǐ lā</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Main CTA</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Check My Numbers</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">查我的号码</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Chá wǒ de hàomǎ</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">CTA hook</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Check see if your numbers / got strike before!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">看看你的号码 / 有没有中过！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Kànkan nǐ de hàomǎ / yǒu méiyǒu zhòng guò!</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Empty State</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">First line</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">No numbers saved yet leh!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">还没有存号码咧！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Hái méiyǒu cún hàomǎ le!</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Hook</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Add your numbers &amp; check see if your numbers got strike before.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">加入你的号码，看看有没有中过。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Jiārù nǐ de hàomǎ, kànkan yǒu méiyǒu zhòng guò.</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Draw Info Panel</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Next Draw label</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Next Draw</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">下期开彩</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Xià qī kāi cǎi</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Last draw label</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Last draw (date)</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">上期开彩 (日期)</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Shàng qī kāi cǎi (rìqī)</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Results</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Last drawn</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Last drawn X days ago</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">上次出现在X天前</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Shàngcì chūxiàn zài X tiān qián</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Struck</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">This number confirm struck before</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">这号码之前中过啦</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Zhè hàomǎ zhīqián zhòng guò lā</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Never struck</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">This number never struck before sia</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">这号码从来没中过咧</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Zhè hàomǎ cónglái méi zhòng guò le</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Not in sample</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Not in our sample of draws leh</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">不在我们的样本里咧</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Bù zài wǒmen de yángběn lǐ le</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">TOTO section</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">How huat your numbers are:</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">你的号码有多旺：</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Nǐ de hàomǎ yǒu duō wàng:</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Disclaimer</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Every draw separate one ah — past results cannot tell you what comes next hor.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">每次开彩都是独立的哦 — 过去结果告诉不了你下次的呵。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Měi cì kāi cǎi dōu shì dúlì de ó — guòqù jiéguǒ gàosù bù liǎo nǐ xià cì de he.</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Insights</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Recent</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Still warm — only X days ago leh.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">还很热 — 才X天前咧。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Hái hěn rè — cái X tiān qián le.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Long absent</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Wah, long time no see — last seen X days ago sia.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">哇，好久没出现了 — 上次是X天前。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Wā, hǎo jiǔ méi chūxiàn le — shàngcì shì X tiān qián.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Average</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Last seen X days ago, quite average lor.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">X天前出现过，算一般咯。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">X tiān qián chūxiàn guò, suàn yībān lo.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Never seen</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">This one very shy leh — not in our sample.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">这个很害羞咧 — 样本里没有它。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Zhège hěn hàixiū le — yángběn lǐ méiyǒu tā.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Rarest digit</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Digit X in position Y is the shy one — seen only X times there.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">第Y位的X最少出现 — 只出现过X次。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Dì Y wèi de X zuì shǎo chūxiàn — zhǐ chūxiàn guò X cì.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Longest MIA</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Position Y (digit X) confirm MIA the longest — X days.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">第Y位（数字X）消失最久啦 — X天。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Dì Y wèi (shùzì X) xiāoshī zuì jiǔ lā — X tiān.</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Notifications</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">New results</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Eh, new draw results out already!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">哎，新一期的开彩结果出来了！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Āi, xīn yī qī de kāi cǎi jiéguǒ chūlái le!</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Draw closing</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Eh, 4D draw closing soon!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">哎，4D 快截止了！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Āi, 4D kuài jiézhǐ le!</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Check now body</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Go check your numbers against the latest draw lah.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">快去对一对你的号码啦。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Kuài qù duì yī duì nǐ de hàomǎ lā.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Closing body</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Today's draw closes 6:30pm — faster add your numbers.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">今天6:30pm截止 — 快加你的号码。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Jīntiān 6:30pm jiézhǐ — kuài jiā nǐ de hàomǎ.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Welcome</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Every number confirm got history lah — start by adding one and checking it.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">每个号码都有历史啦 — 先加一个号码，然后查查看。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Měi gè hàomǎ dōu yǒu lìshǐ lā — xiān jiā yī gè hàomǎ, rán hòu chá chá kàn.</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Preferences</td></tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Range label</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">How many years of past results you want to check?</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">你要查几年的记录哦？</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Nǐ yào chá jǐ nián de jìlù ó?</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Range: 1 Year</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Fast check for recent draws!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">快速查近期的开彩！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Kuàisù chá jìn qī de kāi cǎi!</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Range: 5 Years</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Check if your numbers come up often.</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">看看你的号码出现多不多。</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Kànkan nǐ de hàomǎ chūxiàn duō bù duō.</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Range: 10 Years</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Check against 10-year history!</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">对照10年的历史记录！</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Duìzhào 10 nián de lìshǐ jìlù!</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Delete confirm</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Remove this number lah?</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">要删掉这个号码啦？</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Yào shān diào zhège hàomǎ lā?</td>
+          </tr>
+          <tr style="border-bottom:1px dotted var(--line)">
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">Deleted snackbar</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Number removed lah</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">号码已删除啦</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Hàomǎ yǐ shānchú lā</td>
+          </tr>
+
+          <tr><td colspan="4" style="padding:10px 0 4px;color:var(--ink-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px dotted var(--line)">Never casual — these stay standard</td></tr>
+          <tr>
+            <td style="padding:8px 10px 8px 0;color:var(--ink);vertical-align:top">NCPG / Play responsibly</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">Play responsibly · NCPG 1800-6-668-668</td>
+            <td style="padding:8px 10px;color:var(--ink-2);vertical-align:top">负责任地游戏 · NCPG 1800-6-668-668</td>
+            <td style="padding:8px 10px;color:var(--ink-soft);vertical-align:top;font-style:italic">Fùzérèn de yóuxì · NCPG 1800-6-668-668</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:14px">Prize tier shortforms (1st Prize, 2nd Prize, 3rd Prize, Starter, Conso) stay in English in both languages — these are Singapore Pools official terms.</p>
+    </div>
+  </section>
+
+  <!-- 10 Feedback & Guardrails -->
+  <section>
+    <div class="section-head"><span class="num">10</span><h2>Feedback &amp; Guardrails</h2></div>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="card">
+        <span class="label">Unread Notification Badge</span>
+        <div class="spec">
+          <div><span class="k">Trigger:</span> any notification with the <code>unread</code> class present</div>
+          <div><span class="k">Hamburger icon:</span> 12px solid gold dot (#E8A93C), top-right corner, 2px paper-coloured ring for contrast against the icon glyph</div>
+          <div><span class="k">Menu drawer row:</span> 10px gold dot inline after the "Notifications" label, before the chevron</div>
+          <div><span class="k">Mark-as-read:</span> fires when the user navigates <i>away</i> from the Notifications screen — via its own back arrow, or the drawer's home icon — not the instant it opens, so the unread state stays visible while actually reading</div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="label">Unread vs Read Notification Card</span>
+        <div class="spec">
+          <div><span class="k">Unread:</span> warm gold-tinted fill (#FBF3E1) · 3px gold left border · bold title (700) · small gold dot before title text</div>
+          <div><span class="k">Read:</span> plain white card, standard 2px ink border on all sides (no special override needed) · regular-weight title (500) in Ink Soft — recedes so unread items pop by contrast</div>
+          <div><span class="k">Rationale:</span> three simultaneous signals (colour + weight + accent) rather than one, so it reads clearly even at a glance</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="label">Delete Confirmation</span>
+      <div class="spec">
+        <div><span class="k">Trigger:</span> tapping delete on a saved 4D/TOTO number never removes it instantly — a modal opens first</div>
+        <div><span class="k">Copy:</span> "Sure you want to remove this number ah?" (EN) · "确定要删除这个号码吗？" (ZH) — a direct confirming question, distinct from the app's usual declarative "lah" register, appropriate for a destructive action</div>
+        <div><span class="k">Actions:</span> Keep (dismiss, no change) / Delete (removes the entry) — entry is untouched until Delete is explicitly pressed</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">NOT FOR PRODUCTION · DESIGN REFERENCE ONLY · Teh Tarik — Concept 2 · NumLah · Jul 2026</div>
+
+</div>
+</body>
+</html>
